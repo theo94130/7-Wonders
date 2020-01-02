@@ -1,0 +1,213 @@
+import random 
+paquet_cartes = []
+def construction_paquet(valeurs,couleurs,n_paquets):
+    # ''' Construction du paquet de cartes formé par plusieurs jeux de
+    # 52 cartes (tries au depart)
+   
+    # Entrées: tir
+    # * valeurs = chaine de caracteres correspondant 
+    # aux valeurs des différentes cartes existantes
+    # * couleurs = chaine de caracteres correspondant 
+    # aux couleurs des différentes cartes existantes
+    # * n_paquets = nombre de paquets de 52 cartes empilés 
+    # dans le sabot (par exemple, 3 paquets de 52 cartes).
+ 
+    # Sortie: 
+    # * paquet_cartes = liste contenant chacun des 2-uples
+    # ('valeur','couleur') identifiants les cartes'''
+  
+    for elem1 in valeurs:
+        for elem2 in couleurs:
+            paquet_cartes = paquet_cartes + [(elem1,elem2)]*n_paquets
+
+        
+    # A completer (sur autant de lignes que vous en éprouverez le besoin
+    #
+    #
+    return paquet_cartes
+
+    
+# def tirage_main_sans_remise(paquet_cartes, n_cartes):
+#     
+#     main=[]
+# #     '''Tirage d une main (enlève les cartes du paquet et les place dans une liste main)
+# #     Entrées: 
+# #     * paquet = paquet de cartes
+# #     * n_cartes = nombre de cartes à tirer
+# #     Sorties: 
+# #     * main = listes de cartes tirées
+# #     * paquet_restant = paquet privé des cartes tirées dans la main'''
+# 
+#     main = paquet_cartes[0:n_cartes]
+#     paquet_restant = paquet_cartes[n_cartes:]
+#     return main,paquet_restant
+# 
+# 
+# def get_mise(id_joueur,id_PJ,reserve_joueurs):
+#     '''Renvoie la mise faite par un joueur. get_mise fait appel a
+#     2 sous fonctions get_mise_humaine() ou get_mise_auto selon 
+#     que le joueur courant est un joueur humain (identifiant du 
+#     joueur dans id_PJ) ou un bot.
+#     Entrées : 
+#     * id_joueur = identifiant du joueur courant.
+#     * id_PJ = liste des identifiants des joueurs humains.
+#     * reserve_joueurs = liste contenant les reserves de 
+#     jetons de chaque joueur.'''
+#     if id_joueur in id_PJ:
+#         mise,reserve_joueurs = get_mise_humaine(id_joueur,reserve_joueurs)
+#     else:
+#         mise,reserve_joueurs = get_mise_auto(id_joueur,reserve_joueurs)
+#     return mise, reserve_joueurs
+# 
+# def verification_nombre(input_text):
+#     '''
+#     La fonction verifie que inpu_text est composée uniquement de caractères qui sont des chiffres/point
+#     Entrées : 
+#     * input_text = 
+#     Sortie : 
+#     * is_nombre = 
+#     '''
+#     caracteres_autorises = '0123456789.'
+#     for caractere in input_text:
+#         if caractere not in caracteres_autorises:
+#             return False
+#     return True
+# 
+# def get_mise_humaine(id_joueur,reserve_joueurs):
+#     '''Interface avec le joueur : Demande la valeur de la mise 
+#     pour le tour, vérifie si celle-ci est inférieure à la reserve 
+#     de jetons du joueur et si oui, retranche la mise à la réserve 
+#     et renvoie la valeur de la mise et la liste des reserves de jetons.
+#     Entrées : 
+#     * id_joueur = identifiant du joueur en cours
+#     * reserve_joueurs = reserve de jeton des différents joueurs
+#     Sorties : 
+#     *mise = mise du joueur courant pour le tour
+#     * reserve_joueurs = reserve de jeton des différents joueurs 
+#     (après retranchement de la mise pour le joueur courant)'''
+#     mise_max = reserve_joueurs[id_joueur]
+#     mise = mise_max + 1
+#     while mise>mise_max:
+#         mise_test = input('Joueur ' +str(id_joueur) +' \
+#         entrez votre mise pour ce tour: ')
+#         is_nombre = verification_nombre(mise_test)
+#         if is_nombre:
+#             mise_test= int(mise_test)
+#             if 0<mise_test<mise_max:
+#                 mise = mise_test
+#             else:
+#                 print('mise invalide, entrez une mise positive \
+#                 et inférieure à votre réserve : '+ str(mise_max))
+#         else:
+#             print('mise invalide, entrez un nombre')
+#     reserve_joueurs[id_joueur] = reserve_joueurs[id_joueur] - mise
+#     return mise, reserve_joueurs
+# 
+# def get_mise_auto(id_joueur,reserve_joueurs):
+#     '''Calcul de la mise pour les bots. Par défaut le bot mise 
+#     un jeton s'il lui en reste au moins 1 et ce qui lui reste s'il reste 
+#     moins d'un jeton
+#     Entrées : 
+#     * id_joueur = identifiant du joueur en cours
+#     * reserve_joueurs = reserve de jeton des différents joueurs
+#     Sorties : 
+#     * mise = mise du joueur courant pour le tour
+#     * reserve_joueurs = reserve de jeton des différents joueurs 
+#     (après retranchement de la mise pour le joueur courant)'''
+#     mise_max = reserve_joueurs[id_joueur]
+#     if mise_max>1:
+#         mise_test = 1
+#         
+#         mise = mise_test
+#     else:
+#         mise = mise_max
+#     reserve_joueurs[id_joueur] = reserve_joueurs[id_joueur] - mise
+#     return mise, reserve_joueurs
+# 
+#     
+# 
+# def get_points(main):
+#     '''Renvoie le nombre de points des cartes contenues dans la main
+#     Entrées : 
+#     * main = liste de cartes dans la main
+#     Sortie : 
+#     * total_points = nombre de points correspondant à la main'''
+#     valeurs_uniques = '23456789XJQK1'
+#     correspondances_points = [2,3,4,5,6,7,8,9,10,10,10,10,11]
+#     valeurs_cartes = [carte[0] for carte in main]
+#     total_points = 0
+#     # total_point est un compteur de points. Pour chaque tuple (valeur, couleur) dans la main, on prend la valeur et on la convertit en valeur numérique grâce à correspondance_point
+#     for valeur in valeurs_cartes:
+#         total_points += correspondances_points[valeurs_uniques.index(valeur)]
+#     return total_points
+# 
+# 
+# 
+# # Etapes
+# 
+# valeurs_cartes = '23456789XJQK1' # Chiffres puis 10, Jack, Queen, King
+# couleurs_cartes = 'SCHD' # Spades, Club, Heart, Diamond
+# 
+# n_joueurs = 3
+# n_paquets = 6
+# id_PJ = [0] # Un seul joueur humain, le reste en bots
+# paquet_cartes = construction_paquet(valeurs_cartes,couleurs_cartes,n_paquets)
+# random.shuffle(paquet_cartes)
+# reserve_joueurs = [100 for i in range(n_joueurs)]
+# 
+# 
+# # Dealer brule 5 cartes
+# inutile , paquet_cartes = tirage_main_sans_remise(paquet_cartes,5)
+# 
+# ### Début partie:
+# 
+# L_mains_joueurs = []
+# L_valeur_mains = []
+# L_mises_tour = []
+# for id_joueur in range(n_joueurs):
+#     mise_joueur,reserve_joueurs = get_mise(id_joueur,id_PJ,reserve_joueurs)
+#     L_mises_tour += [mise_joueur]
+# 
+# # distribution de 2 cartes par joueur + 1 banque
+# 
+# L_joueurs_tour_non_fini = []
+# main_banque,paquet_cartes = tirage_main_sans_remise(paquet_cartes,2)
+# 
+# 
+# 
+# ## On joue sans assurance sinon il faut vérifier si la première carte est un as
+# print('main de la banque : ')
+# print(main_banque)
+# valeur_main_banque = get_points(main_banque)
+# print('score de la banque : '+str(valeur_main_banque))
+# 
+# ########## Tour 1 / Tirage initial + placement des mises: ##############
+# for id_joueur in range(n_joueurs):
+#     main_joueur,paquet_cartes  = tirage_main_sans_remise(paquet_cartes,2)
+#     print('Joueur ' +str(id_joueur)+ ' recoit les cartes:')
+#     print(main_joueur)
+#     valeur_main = get_points(main_joueur)
+#     L_valeur_mains += [valeur_main]
+#     if valeur_main == 21 and valeur_main_banque!= 21:
+#         print('BLACKJACK')
+#         print('joueur '+str(id_joueur)+ ' gagne 1/2 fois sa mise initiale')
+#         reserve_joueurs[id_joueur] += 1.5*L_mises_tour[id_joueur]   
+#     elif valeur_main == 21 and valeur_main_banque== 21:
+#         print('gain nul pour joueur '+str(id_joueur))
+#         reserve_joueurs[id_joueur] += L_mises_tour[id_joueur]   
+#     elif valeur_main != 21 and valeur_main_banque == 21:
+#         print('perdu, fin du tour pour joueur '+str(id_joueur))
+#     else:
+#         print('piocher carte pour joueur '+str(id_joueur))
+#         L_joueurs_tour_non_fini += [id_joueur]
+#     L_mains_joueurs += [main_joueur]
+# # :;:! :
+# # ################### Tour suivants / Tirages: ###############
+# # 
+# # ### To be continued...
+# # 
+# # ################### Calcul des gains  ######################
+# # 
+# # ### To be continued...
+# 
+# 
