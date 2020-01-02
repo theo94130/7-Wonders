@@ -85,7 +85,7 @@ image_tapis = np.zeros([3210,3000,3])
 ## On souhaite maintenant qu'il soit tout vert 
 image_tapis[:,:,:] = [170,90,190]
 
-## 4/ Comme la plaquette contient des cartes de l'âge 1 et de l'âge 2, on va créer deux listes contenant les cartes de l'âge 1 et 2. 
+## 4/ Comme la plaquette contient des cartes de l'âge 1 et de l'âge 2, on va créer deux listes contenant respectivement les cartes de l'âge 1 et 2. 
 ## Pour cartes_age_1
 plt.imshow(fichier_cartes)
 cartes_age_1 = []
