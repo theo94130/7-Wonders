@@ -1,0 +1,231 @@
+## PROJET IPP JEU DE SOCIETE SEVEN WONDERS DUEL
+
+## Gestion de l'affichage des cartes et du plateau de jeu (matplotlib)
+## 1/ Initialisation = on importe les bibliothèques matplotlib et numpy
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from os import chdir, getcwd, mkdir 
+import random 
+#on se place dans le répertoire "C:\\Users\\Théo\\Desktop\\Prépa Chaptal PTSI\\Info\\travail maison", la ou se trouvent les images pour le projet
+encours = getcwd()
+chdir ("C:\\Users\\Théo\\Desktop\\Prépa Chaptal PTSI\\Info\\travail maison") 
+
+## 2/ On sépare les cartes 
+
+##Pour la plaquette cartes_serie_1
+n_lignes = 5
+n_colonnes = 10 
+L_cartes_seven_wonders = []
+correspondances_cartes = []
+fichier_cartes = plt.imread("cartes_serie_1_png.png")
+n_pixels_lignes,n_pixels_colonnes,n_couleurs = fichier_cartes.shape
+
+for i_ligne in range(n_lignes):
+    for i_colonne in range(n_colonnes):
+        bord_haut =  int(i_ligne/n_lignes*n_pixels_lignes)
+        bord_bas = int((i_ligne+1)/n_lignes*n_pixels_lignes)
+        bord_gauche = int(i_colonne/n_colonnes*n_pixels_colonnes)
+        bord_droite = int((i_colonne+1)/n_colonnes*n_pixels_colonnes)
+        L_cartes_seven_wonders += [fichier_cartes[bord_haut:bord_bas,bord_gauche:bord_droite,:]]
+        # print (L_cartes_seven_wonders)
+        correspondances_cartes += [n_lignes,n_colonnes]
+        
+##Pour la plaquette verso_cartes
+
+fichier_verso_cartes = plt.imread("verso_cartes.png")
+plt.imshow(fichier_verso_cartes)
+n_lignes = 5
+n_colonnes = 10 
+L_cartes_seven_wonders_verso = []
+correspondances_cartes_verso = []
+n_pixels_lignes,n_pixels_colonnes,n_couleurs = fichier_verso_cartes.shape
+
+for i_ligne in range(n_lignes):
+    for i_colonne in range(n_colonnes):
+        bord_haut =  int(i_ligne/n_lignes*n_pixels_lignes)
+        bord_bas = int((i_ligne+1)/n_lignes*n_pixels_lignes)
+        bord_gauche = int(i_colonne/n_colonnes*n_pixels_colonnes)
+        bord_droite = int((i_colonne+1)/n_colonnes*n_pixels_colonnes)
+        L_cartes_seven_wonders_verso += [fichier_verso_cartes[bord_haut:bord_bas,bord_gauche:bord_droite,:]]
+        correspondances_cartes_verso += [n_lignes,n_colonnes]
+        
+## on peut afficher une carte en particulier de la plaquette         
+num_carte = 2
+print('affichage de la carte à la position' + ' '+ str(correspondances_cartes[num_carte]))
+plt.imshow(L_cartes_seven_wonders[num_carte])
+
+## Pour la plaquette cartes_serie_2
+fichier_cartes_2 = plt.imread("cartes_serie_2_png.png")
+n_lignes = 3
+n_colonnes = 10 
+L_cartes_seven_wonders_2 = []
+correspondances_cartes_2 = []
+n_pixels_lignes,n_pixels_colonnes,n_couleurs = fichier_cartes_2.shape
+
+for i_ligne in range(n_lignes):
+    for i_colonne in range(n_colonnes):
+        bord_haut =  int(i_ligne/n_lignes*n_pixels_lignes)
+        bord_bas = int((i_ligne+1)/n_lignes*n_pixels_lignes)
+        bord_gauche = int(i_colonne/n_colonnes*n_pixels_colonnes)
+        bord_droite = int((i_colonne+1)/n_colonnes*n_pixels_colonnes)
+        L_cartes_seven_wonders_2 += [fichier_cartes_2[bord_haut:bord_bas,bord_gauche:bord_droite,:]]
+        correspondances_cartes_2 += [n_lignes,n_colonnes]
+        
+## on affiche une carte de la plaquette       
+num_carte = input("Entrez un chiffre")
+num_carte_ok = int(num_carte)
+print('affichage de la carte à la position' + ' '+ str(correspondances_cartes_2[num_carte_ok]))
+plt.imshow(L_cartes_seven_wonders_2[num_carte_ok])
+
+## 3/ On crée un grand tapis pour le plateau
+## on crée un grand tapis noir 
+image_tapis = np.zeros([3210,3000,3])
+## On souhaite maintenant qu'il soit tout vert 
+image_tapis[:,:,:] = [170,90,190]
+
+## 4/ Comme la plaquette contient des cartes de l'âge 1 et de l'âge 2, on va créer deux listes contenant les cartes de l'âge 1 et 2. 
+## Pour cartes_age_1
+plt.imshow(fichier_cartes)
+cartes_age_1 = []
+cartes_age_2 = []
+for i in range (0,23):
+     for j in range (23,46):
+        cartes_age_2.append(L_cartes_seven_wonders[i])
+        cartes_age_1.append(L_cartes_seven_wonders[j])
+random.shuffle(cartes_age_1)# on mélange les cartes de l'âge 1
+random.shuffle(cartes_age_2)# on mélange les cartes de l'âge 2 
+
+## on fait de même pour les verso de cartes: 
+fichier_verso_cartes = plt.imread("verso_cartes.png")
+verso_cartes_age_1 = []
+verso_cartes_age_2 = []
+for i in range (0,23):
+    for j in range (23,46):
+     verso_cartes_age_2.append(L_cartes_seven_wonders_verso[i])
+     verso_cartes_age_1.append(L_cartes_seven_wonders_verso[j])
+random.shuffle(verso_cartes_age_1)# on mélange les cartes de l'âge 1
+random.shuffle(verso_cartes_age_2)# on mélange les cartes de l'âge 2 
+    
+## 5/ On a un tapis vert, maintenant on veut disposer des cartes sur ce tapis.
+n_cartes_affichees = 20 #On définit le nombre de cartes qu'on souhaite afficher
+# Les niveaux (resp. niveaux bis) correspondent aux cartes recto (resp. cartes verso)
+niveau_1 = [[2568,50+500*i] for i in range(0,6)]
+niveau_1_bis =[[1926,295+500*i] for i in range(0,5)]
+niveau_2 = [[1284,550+500*i] for i in range(0,4)]
+niveau_2_bis = [[642,795+500*i] for i in range(0,3)]
+niveau_3 = [[0,1050+500*i] for i in range (0,2)]
+image_tapis_cartes = image_tapis.copy()
+niveau = [] 
+niveau_bis = []
+
+
+# # Maintenant on insère des cartes en remplaçant les pixels de image_tapis par ceux des cartes
+for i_carte in range(n_cartes_affichees):
+    carte = cartes_age_1[i_carte]
+    verso_carte = verso_cartes_age_1[i_carte]
+    verso_carte = verso_carte[:,:,0:3]
+    h_carte,l_carte,couleurs = carte.shape
+    verso_h_carte, verso_l_carte, verso_couleurs = verso_carte.shape
+    
+    if i_carte <=5:
+        niveau = niveau_1[i_carte]
+    elif i_carte >5 and i_carte <=10:
+        niveau_bis = niveau_1_bis[i_carte-6]
+    elif i_carte >10 and i_carte <= 14:
+        niveau = niveau_2[i_carte-11]
+    elif i_carte >14 and i_carte <= 17:
+        niveau_bis = niveau_2_bis [i_carte-15]
+    else:
+        niveau = niveau_3[i_carte-18]
+    if (i_carte > 5 and i_carte <=10) or (i_carte >14 and i_carte <= 17):
+        image_tapis_cartes[niveau_bis[0]:niveau_bis[0]+verso_h_carte, niveau_bis[1]:niveau_bis[1]+verso_l_carte,:] = verso_carte
+    else:
+        image_tapis_cartes[niveau[0]:niveau[0]+h_carte,niveau[1]:niveau[1]+l_carte,:] = carte
+        
+plt.imshow(image_tapis_cartes,interpolation = 'nearest')
+    
+## On cherche à afficher une carte en particulier affichée sur le plateau
+zoom_carte = int(input("choisissezle numéro d'une carte à afficher"))
+if (zoom_carte > 5 and zoom_carte <=10) or (zoom_carte >14 and zoom_carte <= 17):
+    carte_affichee = verso_cartes_age_1[zoom_carte]
+else:
+    carte_affichee = cartes_age_1[zoom_carte]
+plt.imshow(carte_affichee)
+
+## On détermine le type (scientifique, militaire, civil, commerciale, ressource) de la carte
+
+if (0.25<carte_affichee[100,80][0]<0.36 and 0.08<carte_affichee[100,80][1]<0.14 and 0.002<carte_affichee[100,80][2]<0.028) or (0.35<carte_affichee[100,80][0]<0.5 and 0.35<carte_affichee[100,80][1]<0.45 and 0.32<carte_affichee[100,80][2]<0.40):
+    print ("Carte ressource")
+elif 0<carte_affichee[100,80][0]<0.015 and 0.32<carte_affichee[210,20][1]<0.45 and 0<carte_affichee[210,20][2]<0.15:
+    print ("Carte scientifique")
+elif 0.013<carte_affichee[100,80][0]<0.018 and 0.38<carte_affichee[210,20][1]<0.42 and 0.58<carte_affichee[210,20][2]<0.62:
+    print ("Carte civile")
+elif 0.6<carte_affichee[100,80][0]<0.68 and 0.05<carte_affichee[100,80][1]<0.15 and 0<=carte_affichee[100,80][2]<0.03:
+    print ("Carte militaire")
+elif 0.8<carte_affichee[100,80][0]<0.94 and 0.42<carte_affichee[100,80][1]<0.55 and 0<=carte_affichee[100,80][2]<0.025:
+    print ("Carte commerciale")
+else:
+    print ("Autre")
+plt.imshow(carte_affichee)
+
+
+
+
+
+
+
+
+
+Attention : le code s'arrête ici, le reste ne sont que des pistes de recherche pour la suite. Le reste du code ne marche pas. 
+#on cherche à supprimer une carte en particulier affichée sur le plateau
+
+# del_carte = int(input("choisissezle numéro d'une carte à afficher"))
+# image_tapis_cartes = image_tapis_cartes - image_tapis_cartes[del_carte]
+#     
+# plt.imshow(image_tapis_cartes)
+    
+## création des tuples pour l'âge 1
+# Type = []
+# Coût = []
+# Symbole = []
+# tuple = (Type, Coût, Symbole) 
+# 
+# Type = ["Ressource", "militaire", "bâtiment", "commerce", "scientifique"]
+# Symbole = ["livre", "jar", "fer_à_cheval", "muraille", "théâtre", "goutte", "glaive", "pignon", "lune"]
+# Coût = ["gratuit", "nb_bois", "nb_pierre", "nb_parchemin", "nb_verre","nb_argile", "nb_pièces"]
+
+# def type(image_tapis_cartes, i, j):
+#     for j in range (50,2950):
+#         for i = 2600:
+#             if image_tapis_cartes[
+    
+
+## On détermine le type de la carte 
+
+
+## Strategie pour reconnaitre la carte: On importe l'image de la carte sur python. On attribue ensuite en fonction des pixels la ressource, le type, le symbole sur la carte. En fonction de tous ces paramètres, on détermine le nom de la carte 
+## 2. initialisation
+# 
+# age =
+# ressources = 
+# symbole = 
+# type = 
+
+## Gestion de l'affichage des cartes et du plateau de jeu (matplotlib)
+
+
+# Règles jeu seven wonders: 
+# - donner a chaque joueur en début de partie 8 pièces d'or
+# - (distribuer à chaque joueur 8 merveilles)
+# * déroulement d'un tour: 
+# - chaque joueur choisit une carte 
+# - 3 choix s'offrent à lui: 
+# n°1: il peut défausser la carte et gagner 2 pièces d'or de la banque (solution pour bloquer un joueur ou lorsque le joueur manque de pièces) 
+# n°2: il peut choisir de construire la carte. Pour construire une carte, soit: 
+#       - la construction est gratuite 
+#       - soit le joueur possède les ressources nécessaires pour construire la carte
+#       - soit le joueur doit acheter à la banque les ressources nécéssaires. Le montant est de 2 pièces par ressource manquante. Attention, si l'adversaire possède la ressource manquante, le montant s'élève à 3 pièces. 
+# n°3: il peut chosir de construire une merveille 
+
